@@ -2,9 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "dev": "vite client/",
+    "build": "vue-tsc -p client/ && vite build client/",
+    "preview": "vite preview client/"
   },
   "dependencies": {
     "@picocss/pico": "^2.0.6",
