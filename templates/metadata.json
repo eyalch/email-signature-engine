@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "htmlTemplatePath": "template_1.html.hbs",
+    "textTemplatePath": "template_1.txt.hbs"
+  },
+  {
+    "id": 2,
+    "htmlTemplatePath": "template_2.html.hbs",
+    "textTemplatePath": "template_2.txt.hbs"
+  },
+  {
+    "id": 3,
+    "htmlTemplatePath": "template_3.html.hbs",
+    "textTemplatePath": "template_3.txt.hbs"
+  }
+]
