@@ -3,8 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite client/",
-    "build": "vue-tsc -p client/ && vite build client/",
-    "preview": "vite preview client/"
+    "build": "vue-tsc -p client/ && vite build client/"
   },
   "devDependencies": {
     "@picocss/pico": "^2.0.6",
