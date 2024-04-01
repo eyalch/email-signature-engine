@@ -23,16 +23,14 @@ await fs.mkdir("previews", { recursive: true })
 
 const browser = await puppeteer.launch()
 
-for (const templateMetadata of await getTemplatesMetadata()) {
-  console.log(`Generating HTML preview for template ${templateMetadata.id}`)
+const metadata = await getTemplatesMetadata()
 
-  const { html } = await renderTemplate(templateMetadata.id, sampleData)
+for (const id of Object.keys(metadata)) {
+  console.log(`Generating HTML preview for template ${id}`)
 
-  await saveHtmlPreview(
-    browser,
-    html,
-    `previews/template_${templateMetadata.id}.png`
-  )
+  const { html } = await renderTemplate(id, sampleData)
+
+  await saveHtmlPreview(browser, html, `previews/template_${id}.png`)
 }
 
 await browser.close()

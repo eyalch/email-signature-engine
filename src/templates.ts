@@ -12,7 +12,10 @@ const templateMetadataSchema = z.object({
 
 type TemplateMetadata = z.infer<typeof templateMetadataSchema>
 
-const templatesMetadata = new LRUCache<"metadata", TemplateMetadata[]>({
+const templatesMetadata = new LRUCache<
+  "metadata",
+  Record<string, TemplateMetadata>
+>({
   max: 1,
   ttl: 1000 * 60 * 5, // 5 minutes
   allowStale: true,
@@ -22,7 +25,9 @@ const templatesMetadata = new LRUCache<"metadata", TemplateMetadata[]>({
       signal,
     })
 
-    return templateMetadataSchema.array().parse(JSON.parse(metadataJson))
+    return z
+      .record(z.string(), templateMetadataSchema)
+      .parse(JSON.parse(metadataJson))
   },
 })
 
@@ -39,8 +44,8 @@ export async function getTemplatesMetadata(signal?: AbortSignal) {
 export async function getTemplatesWithPreview(previewsBaseUrl: string) {
   const metadata = await getTemplatesMetadata()
 
-  return metadata.map(({ id }) => ({
-    id,
+  return Object.keys(metadata).map((id) => ({
+    id: Number(id),
     previewUrl: `${previewsBaseUrl}/template_${id}.png`,
   }))
 }
@@ -53,7 +58,7 @@ function compileTemplate(rawHtmlTemplate: string, rawTextTemplate: string) {
 }
 
 const compiledTemplates = new LRUCache<
-  TemplateMetadata["id"],
+  string,
   ReturnType<typeof compileTemplate>
 >({
   max: 100,
@@ -62,7 +67,7 @@ const compiledTemplates = new LRUCache<
   fetchMethod: async (id, _staleValue, { signal }) => {
     const metadata = await getTemplatesMetadata(signal)
 
-    const templateMetadata = metadata.find((t) => t.id === id)
+    const templateMetadata = metadata[id]
 
     if (!templateMetadata) {
       throw new Error(`Template with ID ${id} not found`)
@@ -85,7 +90,7 @@ const compiledTemplates = new LRUCache<
 
 // TODO: Cache rendered templates
 export async function renderTemplate(
-  id: TemplateMetadata["id"],
+  id: string,
   data: Record<string, unknown>
 ) {
   const compiled = await compiledTemplates.fetch(id)
