@@ -32,7 +32,9 @@ const templatesMetadata = new LRUCache<
 })
 
 export async function getTemplatesMetadata(signal?: AbortSignal) {
-  const metadata = await templatesMetadata.fetch("metadata", { signal })
+  const metadata = await templatesMetadata.fetch("metadata", {
+    ...(signal && { signal }),
+  })
 
   if (!metadata) {
     throw new Error("No templates found")
