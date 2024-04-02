@@ -6,6 +6,7 @@ import TemplateView from "./TemplateView.vue"
 export default createRouter({
   history: createWebHistory(),
   routes: [
+    { path: "/", redirect: { name: "templates" } },
     { name: "templates", path: "/templates", component: TemplateListView },
     {
       name: "template",
