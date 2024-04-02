@@ -10,7 +10,7 @@ import { renderTemplate, templateDataSchema } from "./templates.js"
 
 const resultsQueue = new Queue(BULK_RENDER_RESULTS_QUEUE, { connection: redis })
 
-new Worker(
+const bulkRenderWorker = new Worker(
   BULK_RENDER_QUEUE,
   async (job) => {
     const data = z
@@ -51,10 +51,17 @@ new Worker(
   { connection: redis }
 )
 
-new Worker(
+const resultsWorker = new Worker(
   BULK_RENDER_RESULTS_QUEUE,
   async (job) => {
     console.log(job.data)
   },
   { connection: redis }
 )
+
+async function closeWorkers() {
+  await Promise.all([bulkRenderWorker.close(), resultsWorker.close()])
+}
+
+process.on("SIGINT", closeWorkers)
+process.on("SIGTERM", closeWorkers)
