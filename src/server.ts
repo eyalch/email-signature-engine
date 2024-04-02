@@ -72,7 +72,7 @@ fastify.register(
 
     instance.post(
       "/render/bulk",
-      async (request: RequestWithTemplateMetadata) => {
+      async (request: RequestWithTemplateMetadata, reply) => {
         const templateMetadata = request.templateMetadata!
 
         const body = z
@@ -88,6 +88,8 @@ fastify.register(
           webhook_url: body.webhook_url,
           requested_at: new Date(),
         })
+
+        reply.status(202)
       }
     )
   },
