@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from "@vueuse/core"
 
-type Template = {
-  id: number
-  previewUrl: string
-}
+import { Template } from "./templates.ts"
 
 const { data, isFetching } = useFetch("/api/templates", {
   initialData: [],
@@ -17,6 +14,14 @@ const { data, isFetching } = useFetch("/api/templates", {
   <span v-if="isFetching" aria-busy="true">Fetching templates…</span>
 
   <article v-for="template in data" :key="template.id">
-    <img :src="template.previewUrl" alt="Template preview" />
+    <RouterLink :to="{ name: 'template', params: { id: template.id } }">
+      <img :src="template.previewUrl" alt="Template preview" />
+    </RouterLink>
+
+    <footer>
+      <RouterLink :to="{ name: 'template', params: { id: template.id } }">
+        Use this template
+      </RouterLink>
+    </footer>
   </article>
 </template>

@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import TemplatesPage from "./TemplatesPage.vue"
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <header>
@@ -9,11 +7,14 @@ import TemplatesPage from "./TemplatesPage.vue"
         <li>
           <strong>Email Signature Engine</strong>
         </li>
+        <li>
+          <RouterLink :to="{ name: 'templates' }">Templates</RouterLink>
+        </li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <TemplatesPage></TemplatesPage>
+    <RouterView></RouterView>
   </main>
 </template>
