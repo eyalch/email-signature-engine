@@ -53,10 +53,25 @@ export async function getTemplatesMetadata(signal?: AbortSignal) {
 export async function getTemplatesWithPreview(previewsBaseUrl: string) {
   const metadata = await getTemplatesMetadata()
 
-  return Object.keys(metadata).map((id) => ({
-    id: Number(id),
-    previewUrl: `${previewsBaseUrl}/template_${id}.png`,
-  }))
+  return Object.values(metadata).map((templateMetadata) =>
+    getTemplateWithPreviewUrl(templateMetadata, previewsBaseUrl)
+  )
+}
+
+export async function getTemplateMetadata(id: number, signal?: AbortSignal) {
+  const metadata = await getTemplatesMetadata(signal)
+
+  return metadata[id]
+}
+
+export function getTemplateWithPreviewUrl(
+  templateMetadata: TemplateMetadata,
+  previewsBaseUrl: string
+) {
+  return {
+    id: templateMetadata.id,
+    previewUrl: `${previewsBaseUrl}/template_${templateMetadata.id}.png`,
+  }
 }
 
 function compileTemplate(rawHtmlTemplate: string, rawTextTemplate: string) {
@@ -67,16 +82,14 @@ function compileTemplate(rawHtmlTemplate: string, rawTextTemplate: string) {
 }
 
 const compiledTemplates = new LRUCache<
-  string,
+  number,
   ReturnType<typeof compileTemplate>
 >({
   max: 100,
   ttl: 1000 * 60 * 5, // 5 minutes
   allowStale: true,
   fetchMethod: async (id, _staleValue, { signal }) => {
-    const metadata = await getTemplatesMetadata(signal)
-
-    const templateMetadata = metadata[id]
+    const templateMetadata = await getTemplateMetadata(id, signal)
 
     if (!templateMetadata) {
       throw new Error(`Template with ID ${id} not found`)
@@ -97,9 +110,23 @@ const compiledTemplates = new LRUCache<
   },
 })
 
+const sampleData = {
+  name: "John Doe",
+  company: "ACME Inc.",
+  company_logo:
+    "https://plugin.markaimg.com/public/e755c7ae/PsiXa6VPzdPwCebvAVzyzGbvKefIjS.png",
+  title: "CEO",
+  email_address: "john.doe@example.com",
+  phone: "123-456-7890",
+  website: "https://example.com",
+  address: "123 Main St, Springfield, IL 62701",
+  avatar:
+    "https://plugin.markaimg.com/public/e755c7ae/yNvnR5NVoTdgaEeGl3UTgn2NZ6LuiA.jpeg",
+}
+
 // TODO: Cache rendered templates
 export async function renderTemplate(
-  id: string,
+  id: number,
   data: Record<string, unknown>
 ) {
   const compiled = await compiledTemplates.fetch(id)
@@ -108,8 +135,10 @@ export async function renderTemplate(
     throw new Error(`Template with ID ${id} not found`)
   }
 
+  const dataWithSample = { ...sampleData, ...data }
+
   return {
-    html: compiled.htmlTemplate(data),
-    text: compiled.textTemplate(data),
+    html: compiled.htmlTemplate(dataWithSample),
+    text: compiled.textTemplate(dataWithSample),
   }
 }

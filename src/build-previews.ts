@@ -4,30 +4,16 @@ import puppeteer, { Browser } from "puppeteer"
 
 import { getTemplatesMetadata, renderTemplate } from "./templates.js"
 
-const sampleData = {
-  name: "John Doe",
-  company: "Example Corp",
-  company_logo:
-    "https://plugin.markaimg.com/public/e755c7ae/PsiXa6VPzdPwCebvAVzyzGbvKefIjS.png",
-  title: "CEO",
-  email_address: "john.doe@example.com",
-  phone: "123-456-7890",
-  website: "https://example.com",
-  address: "123 Main St, Springfield, IL 62701",
-  avatar:
-    "https://plugin.markaimg.com/public/e755c7ae/yNvnR5NVoTdgaEeGl3UTgn2NZ6LuiA.jpeg",
-}
-
 await fs.mkdir("previews", { recursive: true })
 
 const browser = await puppeteer.launch()
 
 const metadata = await getTemplatesMetadata()
 
-for (const id of Object.keys(metadata)) {
+for (const { id } of Object.values(metadata)) {
   console.log(`Generating HTML preview for template ${id}`)
 
-  const { html } = await renderTemplate(id, sampleData)
+  const { html } = await renderTemplate(id, {})
 
   await saveHtmlPreview(browser, html, `previews/template_${id}.png`)
 }
