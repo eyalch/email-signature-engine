@@ -4,6 +4,13 @@ import Handlebars from "handlebars"
 import { LRUCache } from "lru-cache"
 import { z } from "zod"
 
+Handlebars.registerHelper("pretty_url", (value: string) => {
+  const url = new URL(value)
+
+  // Remove protocol and trailing slash
+  return url.hostname + url.pathname.replace(/\/$/, "")
+})
+
 const templateMetadataSchema = z.object({
   id: z.number(),
   htmlTemplatePath: z.string(),

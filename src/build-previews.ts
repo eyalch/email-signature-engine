@@ -12,7 +12,6 @@ const sampleData = {
   title: "CEO",
   email_address: "john.doe@example.com",
   phone: "123-456-7890",
-  website_display: "example.com",
   website: "https://example.com",
   address: "123 Main St, Springfield, IL 62701",
   avatar:
