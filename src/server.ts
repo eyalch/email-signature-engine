@@ -17,9 +17,7 @@ if (!previewsBaseUrl) {
   throw new Error("PREVIEWS_BASE_URL environment variable is required")
 }
 
-export const bulkRenderingQueue = new Queue(BULK_RENDER_QUEUE, {
-  connection: redis,
-})
+const bulkRenderingQueue = new Queue(BULK_RENDER_QUEUE, { connection: redis })
 
 const fastify = Fastify({ logger: true })
 
