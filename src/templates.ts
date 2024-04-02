@@ -115,8 +115,8 @@ const sampleData = {
   company: "ACME Inc.",
   company_logo:
     "https://plugin.markaimg.com/public/e755c7ae/PsiXa6VPzdPwCebvAVzyzGbvKefIjS.png",
-  title: "CEO",
-  email_address: "john.doe@example.com",
+  job_title: "CEO",
+  email: "john.doe@example.com",
   phone: "123-456-7890",
   website: "https://example.com",
   address: "123 Main St, Springfield, IL 62701",

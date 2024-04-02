@@ -84,7 +84,7 @@ function copyText(text: string) {
           <label>
             Job Title
             <input
-              v-model="data.jobTitle"
+              v-model="data.job_title"
               placeholder="CEO"
               autocomplete="organization-title"
             />
@@ -93,7 +93,7 @@ function copyText(text: string) {
           <label>
             Company Logo
             <input
-              v-model="data.companyLogo"
+              v-model="data.company_logo"
               type="url"
               placeholder="https://example.com/logo.jpg"
               autocomplete="photo"
