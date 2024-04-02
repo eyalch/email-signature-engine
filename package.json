@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "run-p dev:* serve:previews",
+    "build": "run-s build:*",
     "dev:server": "dotenvx run -- tsx watch src/server.ts",
     "build:server": "tsc",
     "build:previews": "tsx src/build-previews.ts",

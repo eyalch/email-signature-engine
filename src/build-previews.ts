@@ -6,7 +6,9 @@ import { getTemplatesMetadata, renderTemplate } from "./templates.js"
 
 await fs.mkdir("previews", { recursive: true })
 
-const browser = await puppeteer.launch()
+const browser = await puppeteer.launch({
+  args: [process.env["PREVIEWS_PUPPETEER_NO_SANDBOX"] ? "--no-sandbox" : ""],
+})
 
 const metadata = await getTemplatesMetadata()
 

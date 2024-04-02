@@ -1,5 +1,43 @@
 services:
+  server:
+    build: .
+    depends_on:
+      - redis
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      REDIS_URL: redis://redis:6379
+      PREVIEWS_BASE_URL: http://localhost:8081
+
+  bulk-render-worker:
+    build: .
+    depends_on:
+      - server
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+    command: node bulk-render-worker.js
+
+  client:
+    build:
+      context: .
+      target: client
+    depends_on:
+      - server
+    environment:
+      PORT: 8080
+      API_URL: http://server:3000
+    ports:
+      - 8080:8080
+
+  previews:
+    build:
+      context: .
+      target: previews
+    environment:
+      PORT: 8081
+    ports:
+      - 8081:8081
+
   redis:
     image: redis:alpine
-    ports:
-      - 6379:6379

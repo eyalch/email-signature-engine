@@ -96,6 +96,7 @@ fastify.register(
 
 try {
   await fastify.listen({
+    host: process.env["HOST"] || "localhost",
     port: Number(process.env["PORT"]) || 3000,
   })
 } catch (err) {
