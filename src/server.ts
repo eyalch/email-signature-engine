@@ -96,6 +96,24 @@ fastify.register(
   { prefix: "/templates/:id" }
 )
 
+fastify.setErrorHandler((error, _request, reply) => {
+  if (error instanceof z.ZodError) {
+    reply.status(400)
+    return { errors: error.errors }
+  }
+
+  const { statusCode } = error
+
+  if (!statusCode || statusCode >= 500 || statusCode < 400) {
+    fastify.log.error(error)
+  } else if (statusCode >= 400) {
+    fastify.log.info(error)
+  }
+
+  reply.status(500)
+  return { error: "Internal server error" }
+})
+
 try {
   await fastify.listen({
     host: process.env["HOST"] || "localhost",
