@@ -18,6 +18,7 @@
 ### Prerequisites
 
 - Node.js (version specified in `.node-version`)
+- Redis (run `docker compose up -d redis` to start a local instance)
 
 ### Running the application
 
