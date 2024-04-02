@@ -8,12 +8,15 @@
     "build:previews": "tsx src/build-previews.ts",
     "serve:previews": "dotenvx run -- sh -c 'serve -p $PREVIEWS_PORT --no-clipboard --no-request-logging --no-port-switching previews/'",
     "dev:client": "vite client/",
-    "build:client": "vue-tsc -p client/ && vite build client/"
+    "build:client": "vue-tsc -p client/ && vite build client/",
+    "dev:bulk-render-worker": "dotenvx run -- tsx src/bulk-render-worker.ts"
   },
   "dependencies": {
+    "bullmq": "^5.5.0",
     "fastify": "^4.26.2",
     "fastify-graceful-shutdown": "^3.5.3",
     "handlebars": "^4.7.8",
+    "ioredis": "^5.3.2",
     "lru-cache": "^10.2.0",
     "zod": "^3.22.4"
   },
