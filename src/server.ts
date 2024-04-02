@@ -50,21 +50,13 @@ fastify.register(
     )
 
     instance.get("", async (request: RequestWithTemplateMetadata) => {
-      const { templateMetadata } = request
-
-      if (!templateMetadata) {
-        throw new Error("Template metadata not found")
-      }
+      const templateMetadata = request.templateMetadata!
 
       return getTemplateWithPreviewUrl(templateMetadata, previewsBaseUrl)
     })
 
     instance.post("/render", async (request: RequestWithTemplateMetadata) => {
-      const { templateMetadata } = request
-
-      if (!templateMetadata) {
-        throw new Error("Template metadata not found")
-      }
+      const templateMetadata = request.templateMetadata!
 
       const body = z.object({ data: z.record(z.unknown()) }).parse(request.body)
 
