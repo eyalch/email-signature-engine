@@ -17,6 +17,20 @@ const templateMetadataSchema = z.object({
   textTemplatePath: z.string(),
 })
 
+export const templateDataSchema = z
+  .object({
+    name: z.string(),
+    company: z.string(),
+    company_logo: z.string().url(),
+    job_title: z.string(),
+    phone: z.string(),
+    email: z.string().email(),
+    website: z.string().url(),
+    address: z.string(),
+    avatar: z.string().url(),
+  })
+  .partial()
+
 type TemplateMetadata = z.infer<typeof templateMetadataSchema>
 
 const templatesMetadata = new LRUCache<

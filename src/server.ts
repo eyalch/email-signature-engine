@@ -7,6 +7,7 @@ import {
   getTemplateWithPreviewUrl,
   getTemplatesWithPreview,
   renderTemplate,
+  templateDataSchema,
 } from "./templates.js"
 
 const previewsBaseUrl = process.env["PREVIEWS_BASE_URL"]
@@ -58,7 +59,7 @@ fastify.register(
     instance.post("/render", async (request: RequestWithTemplateMetadata) => {
       const templateMetadata = request.templateMetadata!
 
-      const body = z.object({ data: z.record(z.unknown()) }).parse(request.body)
+      const body = z.object({ data: templateDataSchema }).parse(request.body)
 
       return renderTemplate(templateMetadata.id, body.data)
     })
