@@ -54,7 +54,9 @@ function copyText(text: string) {
   <template v-else-if="template">
     <section>
       <h2>Preview</h2>
-      <img :src="template.previewUrl" alt="Template preview" />
+      <article>
+        <img :src="template.previewUrl" alt="Template preview" />
+      </article>
     </section>
 
     <section>
